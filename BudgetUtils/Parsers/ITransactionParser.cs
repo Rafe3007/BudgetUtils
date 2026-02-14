@@ -12,19 +12,19 @@ using System.Text;
 
 namespace BudgetUtils.Parsers
 {
-    internal interface ITransactionParser
+    public interface ITransactionParser
     {
         /// <summary>
         /// Provides the mapping configuration for the parser.
         /// </summary>
         /// <returns>A CsvHelper ClassMap for the specific parser.</returns>
-        ClassMap<BankTransaction> GetParserMap();
+        public ClassMap<BankTransaction> GetParserMap();
 
         /// <summary>
         /// Parses transaction data from a given source and returns a list of transactions.
         /// </summary>
         /// <param name="source">The source of the transaction data (e.g., file path, API endpoint).</param>
         /// <returns>A list of parsed transactions.</returns>
-        IEnumerable<BankTransaction> ParseTransactions(string source);
+        public IEnumerable<BankTransaction> ParseTransactions(string source);
     }
 }

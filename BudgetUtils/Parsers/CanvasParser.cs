@@ -1,30 +1,30 @@
 ﻿using BudgetUtils.Models;
+using CsvHelper;
+using CsvHelper.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using CsvHelper;
-using CsvHelper.Configuration;
 
 namespace BudgetUtils.Parsers
 {
-    public class ChaseFreedomParser : ITransactionParser
+    internal class CanvasParser : ITransactionParser
     {
-        string Name => "Chase Freedom";
-        string FilePattern => "chase*.csv";
+        string Name => "Canvas";
+        string FilePattern => "ExportedTransaction*.csv";
 
         public ClassMap<BankTransaction> GetParserMap()
         {
-            return new ChaseParserMap();
+            return new CanvasParserMap();
         }
 
         /* This class defines the mapping between the CSV columns and the BankTransaction properties for Chase Freedom transactions.
          * required by CsvHelper to correctly parse the CSV file.
          */
-        public sealed class ChaseParserMap : ClassMap<BankTransaction> 
+        public sealed class CanvasParserMap : ClassMap<BankTransaction>
         {
-            public ChaseParserMap()
+            public CanvasParserMap()
             {
-                Map(m => m.TransactionDate).Name("Transaction Date");
+                Map(m => m.TransactionDate).Name("Posting Date");
                 Map(m => m.PaidTo).Name("Description");
                 Map(m => m.Amount).Name("Amount");
             }

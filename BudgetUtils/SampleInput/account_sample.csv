@@ -1,0 +1,4 @@
+      Account type*,Name*,Balance*,Currency
+      Checking,Main Checking Account,1000.00,USD
+      Savings,Emergency Fund,5000.00,USD
+      Credit Card,Rewards Card,-500.00,USD
