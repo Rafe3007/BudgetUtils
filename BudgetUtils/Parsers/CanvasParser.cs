@@ -1,9 +1,12 @@
 ﻿using BudgetUtils.Models;
+using BudgetUtils.Utils;
 using CsvHelper;
 using CsvHelper.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Reflection.PortableExecutable;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BudgetUtils.Parsers
 {
@@ -24,22 +27,22 @@ namespace BudgetUtils.Parsers
         {
             public CanvasParserMap()
             {
-                Map(m => m.TransactionDate).Name("Posting Date");
-                Map(m => m.PaidTo).Name("Description");
-                Map(m => m.Amount).Name("Amount");
+                Map(m => m.TransactionDate).Name("postingdate");
+                Map(m => m.PaidTo).Name("description");
+                Map(m => m.Amount).Name("amount");
             }
         }
 
-        public IEnumerable<BankTransaction> ParseTransactions(string source)
+        public IEnumerable<BankTransaction> ParseTransactions(string filepath)
         {
             try
             {
-                using (var reader = new StringReader(source))
-                using (var csv = new CsvReader(reader, System.Globalization.CultureInfo.InvariantCulture))
+                using (var reader = new StreamReader(filepath))
+                using (var csv = new CsvReader(reader, CsvConfigurationFactory.CreateDefault()))
                 {
                     csv.Context.RegisterClassMap(GetParserMap());
-                    var records = csv.GetRecords<BankTransaction>();
-                    return [.. records];
+                    var records = csv.GetRecords<BankTransaction>().ToList();
+                    return records;
                 }
             }
             catch (Exception ex)

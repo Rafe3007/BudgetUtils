@@ -1,4 +1,5 @@
 ﻿using BudgetUtils.Parsers;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,22 +26,22 @@ namespace BudgetUtils.Services
                 try
                 {
                     var transactions = parser.ParseTransactions(file);
-                    if (transactions != null)
+                    if (transactions != null && transactions.Any())
                     {
-                        foreach (var transaction in transactions)
-                        {
-                            // TODO: Implement logic to write transactions to output file in standardized format.
-                            Console.WriteLine(transaction);
-                        }
+                        //foreach (var transaction in transactions)
+                        //{
+                        //    // TODO: Implement logic to write transactions to output file in standardized format.
+                        //    Console.WriteLine(transaction);
+                        //}
                     }
                     else
                     {
-                        Console.WriteLine($"Warning: No transactions found in file {file}");
+                        AnsiConsole.MarkupLine($"[yellow]Warning:[/] No transactions found in file [blue]{file}[/]");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error processing file {file}: {ex.Message}");
+                    AnsiConsole.MarkupLine($"[red]Error:[/] Failed to process file [blue]{file}[/]. Exception: {ex.Message}");
                     throw;
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using BudgetUtils.Models;
+using BudgetUtils.Utils;
 using CsvHelper;
 using CsvHelper.Configuration;
 using System;
@@ -32,12 +33,12 @@ namespace BudgetUtils.Parsers
             }
         }
 
-        public IEnumerable<BankTransaction> ParseTransactions(string source)
+        public IEnumerable<BankTransaction> ParseTransactions(string filepath)
         {
             try
             {
-                using (var reader = new StringReader(source))
-                using (var csv = new CsvReader(reader, CreateConfig()))
+                using (var reader = new StreamReader(filepath))
+                using (var csv = new CsvReader(reader, CsvConfigurationFactory.CreateDefault()))
                 {
                     csv.Context.RegisterClassMap(GetParserMap());
                     var records = csv.GetRecords<BankTransaction>();
@@ -48,18 +49,6 @@ namespace BudgetUtils.Parsers
             {
                 throw new FormatException("Failed to parse Chase Freedom transactions: ", ex);
             }
-        }
-
-        private static CsvConfiguration CreateConfig()
-        {
-            return new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                PrepareHeaderForMatch = args =>
-                    Regex.Replace(args.Header, @"[^a-zA-Z0-9]", "")
-                         .ToLowerInvariant(),
-                MissingFieldFound = null,
-                HeaderValidated = null
-            };
         }
     }
 }
